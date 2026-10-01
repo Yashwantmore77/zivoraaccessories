@@ -31,6 +31,23 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // Product filters
+  var filters = document.querySelectorAll('.filter');
+  var products = document.querySelectorAll('.product');
+  filters.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var cat = btn.dataset.filter;
+      filters.forEach(function (b) {
+        b.classList.toggle('is-active', b === btn);
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      products.forEach(function (p) {
+        p.hidden = cat !== 'all' && p.dataset.cat !== cat;
+        if (!p.hidden) p.classList.add('is-in');
+      });
+    });
+  });
+
   // Reveal on scroll
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
