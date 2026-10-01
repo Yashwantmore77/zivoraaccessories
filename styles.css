@@ -128,7 +128,7 @@ p { margin: 0; }
   aspect-ratio: 4 / 5; box-shadow: var(--shadow);
   outline: 1px solid var(--gold); outline-offset: 12px;
 }
-.arch img { width: 100%; height: 100%; object-fit: cover; object-position: 35% center; transition: transform 1.2s ease; }
+.arch img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; transition: transform 1.2s ease; }
 .hero__visual:hover .arch img { transform: scale(1.04); }
 
 .stamp {
@@ -199,6 +199,40 @@ p { margin: 0; }
   display: grid; place-items: center; background: var(--rose-soft); color: var(--rose); font-size: 13px; font-weight: 700;
 }
 .note { font-size: 13px; color: var(--muted); text-align: center; margin-top: 12px; }
+
+/* ---------- Shop ---------- */
+.filters { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+.filter {
+  font: 500 14px var(--sans); color: var(--brown); background: transparent;
+  border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px; cursor: pointer;
+  transition: background .25s, color .25s, border-color .25s;
+}
+.filter:hover { border-color: var(--brown); }
+.filter.is-active { background: var(--brown); border-color: var(--brown); color: #fff; }
+.products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.product[hidden] { display: none; }
+.product__media {
+  position: relative; aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden;
+  background: var(--cream-2); box-shadow: 0 14px 34px -24px rgba(90,46,31,.45);
+}
+.product__media img { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; transition: transform .8s ease; }
+.product[data-cat="jewellery"] .product__media img { object-position: center; }
+.product:hover .product__media img { transform: scale(1.05); }
+.product__dm {
+  position: absolute; left: 14px; right: 14px; bottom: 14px;
+  background: rgba(255,250,244,.94); color: var(--brown); text-align: center;
+  padding: 12px; border-radius: 999px; font-weight: 600; font-size: 14px;
+  opacity: 0; transform: translateY(10px); transition: opacity .3s, transform .3s, background .3s, color .3s;
+}
+.product:hover .product__dm, .product__dm:focus-visible { opacity: 1; transform: none; }
+.product__dm:hover { background: var(--brown); color: #fff; }
+.product__info { padding: 16px 4px 0; }
+.product__type { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+.product__info h3 { font-size: 24px; margin-top: 4px; }
+
+@media (hover: none) {
+  .product__dm { opacity: 1; transform: none; }
+}
 
 /* ---------- Steps ---------- */
 .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: none; }
@@ -286,6 +320,7 @@ p { margin: 0; }
   .hero__actions, .hero__trust { justify-content: center; }
   .hero .eyebrow::after { content: ""; width: 28px; height: 1px; background: currentColor; }
   .features, .steps { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
+  .products { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .spotlight__media { min-height: 0; aspect-ratio: 1; }
   .story__body { text-align: center; }
   .story__body .eyebrow::after { content: ""; width: 28px; height: 1px; background: currentColor; }
@@ -313,12 +348,18 @@ p { margin: 0; }
 
 @media (max-width: 520px) {
   .announce { font-size: 12px; }
+  .eyebrow { letter-spacing: .16em; gap: 8px; font-size: 11px; }
+  .eyebrow::before, .eyebrow::after { width: 16px !important; }
   .float-card { left: -6px; top: 20px; padding: 10px 14px; }
   .stamp { right: -6px; width: 100px; height: 100px; bottom: 40px; }
   .stamp text { font-size: 13px; }
   .arch { outline-offset: 8px; }
   .hero__actions .btn { flex: 1 1 100%; }
   .signature { font-size: 34px; }
+  .products { gap: 14px; }
+  .product__info h3 { font-size: 19px; }
+  .product__type { font-size: 10px; }
+  .product__dm { left: 8px; right: 8px; bottom: 8px; padding: 9px; font-size: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
