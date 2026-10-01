@@ -1,0 +1,13 @@
+{
+  "name": "Zivora Accessories",
+  "short_name": "Zivora",
+  "description": "Handmade hair accessories and festive jewellery.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf6ef",
+  "theme_color": "#5a2e1f",
+  "icons": [
+    { "src": "/assets/zivoraaccessories-icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/zivoraaccessories.png", "sizes": "600x600", "type": "image/png" }
+  ]
+}

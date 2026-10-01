@@ -28,6 +28,7 @@ body {
   overflow-x: clip;
 }
 img { max-width: 100%; display: block; }
+picture { display: contents; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3 { font-family: var(--serif); color: var(--brown); font-weight: 600; line-height: 1.08; margin: 0; }
 p { margin: 0; }
@@ -36,6 +37,7 @@ p { margin: 0; }
 
 /* ---------- Shared ---------- */
 .eyebrow {
+  font-family: var(--sans); line-height: 1.5;
   display: inline-flex; align-items: center; gap: 12px;
   font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
   color: var(--gold); margin-bottom: 16px;
@@ -114,7 +116,7 @@ p { margin: 0; }
   pointer-events: none;
 }
 .hero__grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(40px, 6vw, 80px); align-items: center; position: relative; }
-.hero__title { font-size: clamp(54px, 8vw, 104px); font-weight: 600; letter-spacing: -.01em; }
+.hero__title { font-family: var(--serif); color: var(--brown); line-height: 1.08; font-size: clamp(54px, 8vw, 104px); font-weight: 600; letter-spacing: -.01em; }
 .hero__title .script { display: block; font-size: .78em; margin-top: 4px; line-height: 1.1; }
 .hero__lead { font-size: clamp(17px, 1.6vw, 19px); color: var(--muted); max-width: 480px; margin: 24px 0 36px; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 14px; }
@@ -137,7 +139,7 @@ p { margin: 0; }
   display: grid; place-items: center; box-shadow: var(--shadow);
 }
 .stamp svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 18s linear infinite; }
-.stamp text { fill: currentColor; font: 600 10.5px var(--sans); letter-spacing: .2em; }
+.stamp text { fill: currentColor; font: 600 10px var(--sans); }
 .stamp span { font-size: 26px; color: #f2b8c0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -294,7 +296,8 @@ p { margin: 0; }
 .footer__social a:hover { background: var(--brown); border-color: var(--brown); }
 .footer__social a:hover svg { stroke: #fff; }
 .footer__social svg, .cta svg { width: 20px; height: 20px; fill: none; stroke: var(--brown); stroke-width: 1.7; }
-.footer__copy { text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px; }
+.footer__copy { text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px; padding-inline: 16px; }
+.footer__seo { margin-top: 6px; font-size: 12px; opacity: .8; }
 
 /* ---------- Floating DM button (mobile) ---------- */
 .fab {
@@ -352,7 +355,7 @@ p { margin: 0; }
   .eyebrow::before, .eyebrow::after { width: 16px !important; }
   .float-card { left: -6px; top: 20px; padding: 10px 14px; }
   .stamp { right: -6px; width: 100px; height: 100px; bottom: 40px; }
-  .stamp text { font-size: 13px; }
+  .stamp text { font-size: 12px; }
   .arch { outline-offset: 8px; }
   .hero__actions .btn { flex: 1 1 100%; }
   .signature { font-size: 34px; }
