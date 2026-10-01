@@ -6,7 +6,7 @@ Static site: `index.html`, `styles.css`, `script.js`, images in `assets/`.
 Open `index.html` in a browser to preview.
 
 ## Replacing images
-- `assets/logo.png` — brand logo (square, ideally 600×600+)
-- `assets/navratri-hair-accessories.jpg` — Navratri Special product photo (ideally 1200px+)
+- `assets/zivoraaccessories-logo.png` — brand logo (square, ideally 600×600+)
+- `assets/zivoraaccessories-navratri-hair-accessories.jpg` — Navratri Special product photo (ideally 1200px+)
 
 Keep the same file names (or update the paths in `index.html`).
