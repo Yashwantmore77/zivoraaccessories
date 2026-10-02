@@ -84,10 +84,26 @@
         track.scrollTo({ left: target, behavior: 'smooth' });
       });
     });
+    // Load thumbnails ourselves once the slider is near the screen (don't rely on each
+    // browser's lazy-loading inside a sideways scroller, which is unreliable on iOS Safari)
+    var near = false;
+    function loadAhead() {
+      if (!near) return;
+      var s = step(), from = Math.max(0, Math.floor(track.scrollLeft / s)), to = from + perViewCount() * 2 + 1;
+      for (var i = from; i < Math.min(to, items.length); i++) {
+        var img = items[i].querySelector('img');
+        if (img && img.loading === 'lazy') img.loading = 'eager';
+      }
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries, obs) {
+        if (entries[0].isIntersecting) { near = true; loadAhead(); obs.disconnect(); }
+      }, { rootMargin: '400px 0px' }).observe(car);
+    } else { near = true; }
     var raf = null;
     track.addEventListener('scroll', function () {
       if (raf) return;
-      raf = requestAnimationFrame(function () { raf = null; update(); });
+      raf = requestAnimationFrame(function () { raf = null; update(); loadAhead(); });
     }, { passive: true });
     window.addEventListener('resize', update);
     update();

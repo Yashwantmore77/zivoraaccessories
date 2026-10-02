@@ -179,6 +179,11 @@ hero_html = html[html.find('class="hero"'):html.find("<!-- MARQUEE -->")]
 (ok if " reveal" not in hero_html and '"reveal' not in hero_html else fail)("hero has no fade-in (reveal) classes, so LCP is visible at first paint")
 (ok if ".js .reveal" in css or ".reveal" not in css else fail)("reveal animation only hides content when JS runs (.js .reveal)")
 
+# Media components must never depend on the JS fade-in (they stayed blank on iPhones on slow connections)
+(ok if not re.search(r'class="(carousel|reel|gallery)[^"]*\breveal\b', html) else fail)("gallery slider and video reels never use the fade-in (reveal)")
+(ok if "aspect-ratio" not in re.sub(r"/\*.*?\*/", "", css.split("/* ---------- Gallery")[1].split("/* ---------- Steps")[0], flags=re.S) else fail)(
+    "gallery/reel boxes use padding-ratio, not aspect-ratio (iOS Safari safe)")
+
 # Third-party requests slow the page and trigger the GTmetrix CDN/request-chain audits
 ext = [a.get("src") or a.get("href") for t, a in tags
        if t in ("script", "link", "img", "iframe", "source")
