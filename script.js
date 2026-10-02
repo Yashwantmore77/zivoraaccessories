@@ -48,6 +48,141 @@
     });
   });
 
+  // Gallery slider: arrows, counter and progress bar
+  document.querySelectorAll('[data-carousel]').forEach(function (car) {
+    var track = car.querySelector('.gallery');
+    var items = track.children;
+    var prev = car.querySelector('[data-dir="-1"]');
+    var next = car.querySelector('[data-dir="1"]');
+    var count = car.querySelector('.carousel__count');
+    var bar = car.querySelector('.carousel__bar');
+    function step() {
+      return items.length > 1 ? items[1].offsetLeft - items[0].offsetLeft : track.clientWidth;
+    }
+    function perViewCount() {
+      var s = step(), gap = s - items[0].offsetWidth;
+      return Math.max(1, Math.floor((track.clientWidth + gap) / s + 0.02));
+    }
+    function update() {
+      var s = step(), total = items.length;
+      var perView = perViewCount();
+      var max = track.scrollWidth - track.clientWidth;
+      var first = Math.min(total - perView, Math.round(track.scrollLeft / s));
+      if (track.scrollLeft >= max - 2) first = total - perView;
+      first = Math.max(0, first);
+      var last = Math.min(total, first + perView);
+      count.textContent = (perView > 1 ? (first + 1) + '–' + last : last) + ' / ' + total;
+      bar.style.width = (Math.min(perView, total) / total * 100) + '%';
+      bar.style.marginLeft = (first / total * 100) + '%';
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max - 2;
+    }
+    [prev, next].forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var s = step();
+        var target = (Math.round(track.scrollLeft / s) + Number(btn.dataset.dir) * perViewCount()) * s;
+        track.scrollTo({ left: target, behavior: 'smooth' });
+      });
+    });
+    var raf = null;
+    track.addEventListener('scroll', function () {
+      if (raf) return;
+      raf = requestAnimationFrame(function () { raf = null; update(); });
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+
+  // Lightbox: gallery photos and product photos open full size
+  var lb = document.getElementById('lightbox');
+  if (lb && typeof lb.showModal === 'function') {
+    var lbImg = lb.querySelector('.lightbox__img');
+    var lbTitle = lb.querySelector('.lightbox__title');
+    var lbCount = lb.querySelector('.lightbox__count');
+    var group = [], index = 0, lastFocus = null;
+
+    function fullSrc(img) {
+      return img.closest('[data-full]') ? img.closest('[data-full]').dataset.full : img.getAttribute('src').replace(/\.jpg$/, '.webp');
+    }
+    function itemsFor(name) {
+      if (name === 'gallery') {
+        return Array.prototype.map.call(document.querySelectorAll('[data-lightbox="gallery"]'), function (el) {
+          return { src: el.dataset.full, alt: el.querySelector('img').alt, caption: el.dataset.caption };
+        });
+      }
+      return Array.prototype.filter.call(document.querySelectorAll('[data-lightbox-host]'), function (host) {
+        return !host.closest('.product').hidden;
+      }).map(function (host) {
+        var img = host.querySelector('img');
+        return { src: fullSrc(img), alt: img.alt, caption: host.closest('.product').querySelector('h3').textContent };
+      });
+    }
+    function show(i) {
+      index = (i + group.length) % group.length;
+      var it = group[index];
+      lbImg.classList.add('is-loading');
+      lbImg.onload = function () { lbImg.classList.remove('is-loading'); };
+      lbImg.src = it.src;
+      lbImg.alt = it.alt;
+      lbTitle.textContent = it.caption;
+      lbCount.textContent = (index + 1) + ' / ' + group.length;
+      var multi = group.length > 1;
+      lb.querySelector('.lightbox__prev').hidden = !multi;
+      lb.querySelector('.lightbox__next').hidden = !multi;
+      [1, -1].forEach(function (d) { new Image().src = group[(index + d + group.length) % group.length].src; });
+    }
+    function open(name, src) {
+      group = itemsFor(name);
+      var i = group.findIndex(function (it) { return it.src === src; });
+      lastFocus = document.activeElement;
+      show(i < 0 ? 0 : i);
+      document.documentElement.classList.add('lb-open');
+      lb.showModal();
+    }
+    function close() { lb.close(); }
+    lb.addEventListener('close', function () {
+      document.documentElement.classList.remove('lb-open');
+      lbImg.removeAttribute('src');
+      if (lastFocus) lastFocus.focus();
+    });
+
+    document.querySelectorAll('[data-lightbox="gallery"]').forEach(function (el) {
+      el.addEventListener('click', function () { open('gallery', el.dataset.full); });
+    });
+    document.querySelectorAll('[data-lightbox-host]').forEach(function (host) {
+      var img = host.querySelector('img');
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('role', 'button');
+      img.setAttribute('aria-label', 'Open photo: ' + host.closest('.product').querySelector('h3').textContent);
+      img.addEventListener('click', function () { open('shop', fullSrc(img)); });
+      img.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open('shop', fullSrc(img)); }
+      });
+    });
+
+    lb.addEventListener('click', function (e) {
+      var action = e.target.closest('[data-lb]');
+      if (action) {
+        var a = action.dataset.lb;
+        if (a === 'close') close(); else show(index + (a === 'next' ? 1 : -1));
+      } else if (!e.target.closest('.lightbox__img, .lightbox__caption')) {
+        close();
+      }
+    });
+    lb.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') show(index + 1);
+      if (e.key === 'ArrowLeft') show(index - 1);
+    });
+    var touchX = null;
+    lb.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', function (e) {
+      if (touchX === null) return;
+      var dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 50 && group.length > 1) show(index + (dx < 0 ? 1 : -1));
+      touchX = null;
+    });
+  }
+
   // Reveal on scroll
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {

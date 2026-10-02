@@ -10,3 +10,10 @@ Open `index.html` in a browser to preview.
 - `assets/zivoraaccessories-1.jpg` — Navratri Special product photo (ideally 1200px+)
 
 Keep the same file names (or update the paths in `index.html`).
+
+## Before every change
+Run the SEO + performance checker and fix any failures (details in `CLAUDE.md`):
+
+```
+python3 tools/check_site.py
+```
