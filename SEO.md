@@ -14,7 +14,7 @@
 - Page language set to English (India): `lang="en-IN"`, `og:locale=en_IN`
 
 ## Target keywords (tags)
-**Brand:** Zivora, Zivora Accessories, zivoraaccessories
+**Brand:** Zivora Accessories, zivoraaccessories
 
 **Main keywords:**
 - handmade hair accessories
@@ -37,7 +37,7 @@
 - lightweight festive jewellery
 
 ## Instagram hashtags (use 10–15 per post)
-#zivoraaccessories #zivora #handmadeaccessories #handmadejewellery
+#zivoraaccessories #handmadeaccessories #handmadejewellery
 #navratrihairaccessories #garbahairstyle #navratri #garbanight #navratrilook
 #hairtassels #parandi #hairaccessories #mirrorwork #cowriejewellery
 #threadjewellery #ethnicjewellery #festivelook #traditionaljewellery
