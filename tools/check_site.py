@@ -121,6 +121,18 @@ no_dim = [a.get("src") for a in imgs if a.get("src") and not (a.get("width") and
 eager = [a.get("src") for a in imgs if a.get("src") and a.get("loading") != "lazy"]
 (ok if len(eager) <= 3 else warn)(f"{len(eager)} images load eagerly (only above-the-fold ones should): {eager}")
 
+# Videos: must not load before the user scrolls to them, and must be described for Google
+vids = find("video")
+lazy_v = [a for a in vids if a.get("preload") == "none" and "autoplay" not in a]
+(ok if len(lazy_v) == len(vids) else fail)(f"all <video> use preload=none and no autoplay attribute ({len(lazy_v)}/{len(vids)})")
+(ok if all(a.get("width") and a.get("height") for a in vids) else fail)("all <video> have width/height")
+js_v = [a for a in vids if "controls" not in a]
+(ok if all("muted" in a and "playsinline" in a and a.get("data-poster") for a in js_v) else fail)(
+    "scripted <video> are muted + playsinline with a deferred data-poster")
+(ok if not js_v or html.count('"VideoObject"') >= len(js_v) else fail)(f"VideoObject JSON-LD for each video ({html.count('VideoObject')})")
+big_v = [f for f in os.listdir(os.path.join(ROOT, "assets")) if f.endswith(".mp4") and size("assets/" + f) > 2_000_000]
+(ok if not big_v else fail)(f"video files under 2 MB each ({big_v})")
+
 # Links: no empty hrefs, external links safe
 for a in find("a"):
     h = a.get("href")
