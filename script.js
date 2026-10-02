@@ -93,6 +93,63 @@
     update();
   });
 
+  // Video reels: load only near the viewport, autoplay muted while visible, play/pause + sound buttons
+  var reels = document.querySelectorAll('.reel__video');
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function loadReel(v) {
+    if (v.dataset.loaded) return;
+    v.dataset.loaded = '1';
+    v.poster = v.dataset.poster;
+    v.querySelectorAll('source[data-src]').forEach(function (s) { s.src = s.dataset.src; });
+    v.load();
+  }
+  function setPlayBtn(v) {
+    var b = v.parentNode.querySelector('.reel__play');
+    b.setAttribute('aria-pressed', String(v.paused));
+    b.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video');
+  }
+  reels.forEach(function (v) {
+    var frame = v.parentNode;
+    if (reduceMotion) v.dataset.userPaused = '1';
+    v.addEventListener('play', function () { setPlayBtn(v); });
+    v.addEventListener('pause', function () { setPlayBtn(v); });
+    frame.querySelector('.reel__play').addEventListener('click', function () {
+      loadReel(v);
+      if (v.paused) { v.dataset.userPaused = ''; v.play().catch(function () {}); }
+      else { v.dataset.userPaused = '1'; v.pause(); }
+    });
+    frame.querySelector('.reel__sound').addEventListener('click', function () {
+      var on = v.muted;
+      reels.forEach(function (o) {
+        o.muted = true;
+        var b = o.parentNode.querySelector('.reel__sound');
+        b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Turn sound on');
+      });
+      if (on) {
+        loadReel(v);
+        v.muted = false; v.dataset.userPaused = '';
+        if (v.paused) v.play().catch(function () {});
+        this.setAttribute('aria-pressed', 'true'); this.setAttribute('aria-label', 'Turn sound off');
+      }
+    });
+    setPlayBtn(v);
+  });
+  if (reels.length && 'IntersectionObserver' in window) {
+    var near = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { loadReel(e.target); near.unobserve(e.target); } });
+    }, { rootMargin: '300px 0px' });
+    var vis = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting && !v.dataset.userPaused) { loadReel(v); v.play().catch(function () {}); }
+        else if (!e.isIntersecting && !v.paused) v.pause();
+      });
+    }, { threshold: 0.5 });
+    reels.forEach(function (v) { near.observe(v); vis.observe(v); });
+  } else {
+    reels.forEach(loadReel);
+  }
+
   // Lightbox: gallery photos and product photos open full size
   var lb = document.getElementById('lightbox');
   if (lb && typeof lb.showModal === 'function') {

@@ -349,6 +349,40 @@ html.lb-open { overflow: hidden; }
   .lightbox__title { font-size: 19px; }
 }
 
+/* ---------- Video reels ---------- */
+.reels { display: grid; grid-template-columns: repeat(2, minmax(0, 300px)); justify-content: center; gap: 28px; }
+.reel { margin: 0; }
+.reel__frame {
+  position: relative; aspect-ratio: 478 / 850; border-radius: var(--radius); overflow: hidden;
+  background: linear-gradient(160deg, #6b3a28, #3e1f14); box-shadow: var(--shadow);
+}
+.reel__video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.reel__btn {
+  position: absolute; bottom: 12px; width: 42px; height: 42px; border-radius: 50%; border: 0;
+  background: rgba(30, 15, 10, .55); color: #fff; display: grid; place-items: center; cursor: pointer;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background .2s, transform .2s;
+}
+.reel__btn:hover { background: rgba(30, 15, 10, .8); transform: scale(1.06); }
+.reel__btn:focus-visible { outline: 3px solid #f2b8c0; outline-offset: 2px; }
+.reel__btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.reel__play { left: 12px; }
+.reel__play .i-play { fill: currentColor; }
+.reel__sound { right: 12px; }
+.reel__play .i-play, .reel__play[aria-pressed="true"] .i-pause,
+.reel__sound .i-sound, .reel__sound[aria-pressed="true"] .i-muted { display: none; }
+.reel__play[aria-pressed="true"] .i-play, .reel__sound[aria-pressed="true"] .i-sound { display: block; }
+.reel__caption { padding: 14px 4px 0; text-align: center; }
+.reel__caption strong { display: block; font: 600 22px/1.2 var(--serif); color: var(--brown); }
+.reel__caption span { display: block; margin-top: 2px; font-size: 14px; line-height: 1.4; color: var(--muted); }
+@media (max-width: 640px) {
+  .reels { gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .reel__frame { border-radius: 16px; }
+  .reel__btn { width: 36px; height: 36px; bottom: 8px; }
+  .reel__play { left: 8px; } .reel__sound { right: 8px; }
+  .reel__caption strong { font-size: 17px; }
+  .reel__caption span { font-size: 12px; }
+}
+
 /* ---------- Steps ---------- */
 .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: none; }
 .step { position: relative; padding: 36px 30px; border-radius: var(--radius); border: 1px dashed var(--gold); background: transparent; transition: background .3s; }
