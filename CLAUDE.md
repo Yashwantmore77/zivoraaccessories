@@ -25,6 +25,7 @@ The owner tracks Google ranking and the GTmetrix grade, so every change must sta
   - wrapped in `<picture>` with 480w/800w WebP `srcset` and `sizes`. Generate the variants with Pillow, quality about 78.
   - File names start with `zivoraaccessories-`.
 - **Never hide the hero.** Nothing above the fold may start at `opacity: 0` or rely on JS to appear, or Lighthouse/GTmetrix fails with "Failed to find the Largest Contentful Paint". Fade-ins (`.reveal`) are for below-the-fold sections only and are gated on the `js` class.
+- **Media must never depend on JS to become visible** (iPhones on slow data showed an empty gallery). No `.reveal` on the gallery slider or video reels. A 3-second `reveal-all` safety net in `<head>` shows all sections if `script.js` is late. Size media boxes with a padding ratio (`height:0; padding-top:…%`), not `aspect-ratio` on `<button>`. iPhone browsers all use WebKit, which isn't available here, so be conservative with newer CSS.
 - **No layout shift from fonts:** keep the metric-matched fallback `@font-face` rules ("DM Sans Fallback", "Cormorant Fallback") in front of the generic fallbacks.
 - **Contrast:** small text must reach at least 4.5:1. Use `--muted` (#7a5f53) and `--gold-text` (#8c6224) for text, and keep `--gold` for lines and decoration.
 - **Preloads:** at most 3, and the hero image keeps `fetchpriority="high"`. Don't preload anything that competes with it.
