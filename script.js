@@ -48,6 +48,51 @@
     });
   });
 
+  // Gallery slider: arrows, counter and progress bar
+  document.querySelectorAll('[data-carousel]').forEach(function (car) {
+    var track = car.querySelector('.gallery');
+    var items = track.children;
+    var prev = car.querySelector('[data-dir="-1"]');
+    var next = car.querySelector('[data-dir="1"]');
+    var count = car.querySelector('.carousel__count');
+    var bar = car.querySelector('.carousel__bar');
+    function step() {
+      return items.length > 1 ? items[1].offsetLeft - items[0].offsetLeft : track.clientWidth;
+    }
+    function perViewCount() {
+      var s = step(), gap = s - items[0].offsetWidth;
+      return Math.max(1, Math.floor((track.clientWidth + gap) / s + 0.02));
+    }
+    function update() {
+      var s = step(), total = items.length;
+      var perView = perViewCount();
+      var max = track.scrollWidth - track.clientWidth;
+      var first = Math.min(total - perView, Math.round(track.scrollLeft / s));
+      if (track.scrollLeft >= max - 2) first = total - perView;
+      first = Math.max(0, first);
+      var last = Math.min(total, first + perView);
+      count.textContent = (perView > 1 ? (first + 1) + '–' + last : last) + ' / ' + total;
+      bar.style.width = (Math.min(perView, total) / total * 100) + '%';
+      bar.style.marginLeft = (first / total * 100) + '%';
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max - 2;
+    }
+    [prev, next].forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var s = step();
+        var target = (Math.round(track.scrollLeft / s) + Number(btn.dataset.dir) * perViewCount()) * s;
+        track.scrollTo({ left: target, behavior: 'smooth' });
+      });
+    });
+    var raf = null;
+    track.addEventListener('scroll', function () {
+      if (raf) return;
+      raf = requestAnimationFrame(function () { raf = null; update(); });
+    }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+
   // Lightbox: gallery photos and product photos open full size
   var lb = document.getElementById('lightbox');
   if (lb && typeof lb.showModal === 'function') {

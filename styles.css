@@ -244,15 +244,23 @@ p { margin: 0; }
   .product__dm { opacity: 1; transform: none; }
 }
 
-/* ---------- Gallery ---------- */
-.gallery { columns: 3 260px; column-gap: 20px; }
+/* ---------- Gallery (slider) ---------- */
+.gallery {
+  --per-view: 3; --gap: 20px;
+  display: flex; gap: var(--gap); overflow-x: auto; overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none;
+  padding: 4px 2px 24px; margin: -4px -2px 0;
+}
+.gallery::-webkit-scrollbar { display: none; }
+.gallery:focus-visible { outline: 3px solid var(--rose); outline-offset: 4px; border-radius: var(--radius); }
 .gallery__item {
-  position: relative; display: block; width: 100%; margin: 0 0 20px; padding: 0;
-  border: 0; border-radius: var(--radius); overflow: hidden; cursor: zoom-in;
-  background: var(--cream-2); break-inside: avoid;
+  position: relative; flex: 0 0 calc((100% - (var(--per-view) - 1) * var(--gap)) / var(--per-view));
+  aspect-ratio: 4 / 5; padding: 0; border: 0; border-radius: var(--radius); overflow: hidden;
+  cursor: zoom-in; background: var(--cream-2); scroll-snap-align: start;
   box-shadow: 0 14px 34px -24px rgba(90,46,31,.45);
 }
-.gallery__item img { width: 100%; height: auto; transition: transform .8s ease, filter .4s ease; }
+.gallery__item picture, .gallery__item img { width: 100%; height: 100%; }
+.gallery__item img { object-fit: cover; object-position: center 30%; transition: transform .8s ease, filter .4s ease; }
 .gallery__item:hover img, .gallery__item:focus-visible img { transform: scale(1.04); filter: brightness(.92); }
 .gallery__item:focus-visible { outline: 3px solid var(--rose); outline-offset: 3px; }
 .gallery__zoom {
@@ -263,6 +271,32 @@ p { margin: 0; }
 .gallery__zoom svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 .gallery__item:hover .gallery__zoom, .gallery__item:focus-visible .gallery__zoom { opacity: 1; transform: none; }
 @media (hover: none) { .gallery__zoom { opacity: 1; transform: none; width: 34px; height: 34px; right: 10px; bottom: 10px; } }
+
+.carousel { position: relative; }
+.carousel__controls { display: flex; align-items: center; gap: 16px; margin-top: 6px; }
+.carousel__btn {
+  position: absolute; top: calc(50% - 40px); z-index: 2; width: 52px; height: 52px; border-radius: 50%;
+  border: 0; background: rgba(255,250,244,.95); color: var(--brown); display: grid; place-items: center;
+  cursor: pointer; box-shadow: 0 10px 26px -10px rgba(90,46,31,.55);
+  transition: background .25s, color .25s, opacity .25s, transform .25s;
+}
+.carousel__btn--prev { left: -18px; }
+.carousel__btn--next { right: -18px; }
+.carousel__btn:hover:not(:disabled) { background: var(--brown); color: #fff; }
+.carousel__btn:focus-visible { outline: 3px solid var(--rose); outline-offset: 2px; }
+.carousel__btn:disabled { opacity: 0; pointer-events: none; transform: scale(.8); }
+.carousel__btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.carousel__progress { flex: 1; height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.carousel__bar { display: block; height: 100%; width: 0; background: var(--brown); border-radius: 3px; transition: width .3s ease, margin-left .3s ease; }
+.carousel__count { flex: none; min-width: 72px; text-align: right; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+@media (max-width: 960px) { .gallery { --per-view: 2; } .carousel__btn--prev { left: 8px; } .carousel__btn--next { right: 8px; } }
+@media (max-width: 640px) {
+  .gallery { --per-view: 1.25; --gap: 12px; }
+  .gallery__item { border-radius: 16px; }
+  .carousel__btn { width: 40px; height: 40px; top: calc(50% - 32px); }
+  .carousel__btn--prev { left: 6px; }
+  .carousel__btn--next { right: 6px; }
+}
 [data-lightbox-host] img { cursor: zoom-in; }
 
 /* ---------- Lightbox ---------- */
@@ -299,8 +333,6 @@ p { margin: 0; }
 html.lb-open { overflow: hidden; }
 
 @media (max-width: 640px) {
-  .gallery { columns: 2; column-gap: 12px; }
-  .gallery__item { margin-bottom: 12px; border-radius: 16px; }
   .lightbox[open] { grid-template-columns: 1fr; }
   .lightbox__figure { grid-column: 1; padding: 0 10px; }
   .lightbox__img { max-height: calc(100vh - 170px); }
