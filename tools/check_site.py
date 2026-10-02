@@ -167,9 +167,9 @@ for r in refs:
     for part in r.split(","):
         u = part.strip().split(" ")[0]
         if u and not re.match(r"(https?:|mailto:|tel:|#|data:)", u):
-            local.add(u.lstrip("/"))
+            local.add(u.split("?")[0].lstrip("/"))
 css = open(os.path.join(ROOT, "styles.css"), encoding="utf-8").read()
-local |= set(re.findall(r'url\("?([^")]+)"?\)', css))
+local |= set(u.split("?")[0] for u in re.findall(r'url\("?([^")]+)"?\)', css))
 missing = sorted(u for u in local if u and not exists(u))
 (ok if not missing else fail)(f"every referenced local file exists ({len(missing)} missing: {missing[:5]})")
 
@@ -183,6 +183,21 @@ hero_html = html[html.find('class="hero"'):html.find("<!-- MARQUEE -->")]
 (ok if not re.search(r'class="(carousel|reel|gallery)[^"]*\breveal\b', html) else fail)("gallery slider and video reels never use the fade-in (reveal)")
 (ok if "aspect-ratio" not in re.sub(r"/\*.*?\*/", "", css.split("/* ---------- Gallery")[1].split("/* ---------- Steps")[0], flags=re.S) else fail)(
     "gallery/reel boxes use padding-ratio, not aspect-ratio (iOS Safari safe)")
+
+# Cache busting: every local file the browser fetches must carry ?v=<content hash>, so phones never
+# keep using an old styles.css / photo (vercel.json caches these for a year)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bump_versions as bv
+stale = []
+for attr_val in re.findall(r'(?:src|srcset|href|data-src|data-poster|data-full|poster|imagesrcset)="([^"]*)"', html) + re.findall(r'url\("([^")]+)"\)', css):
+    for part in attr_val.split(","):
+        u = part.strip().split(" ")[0]
+        if not u or re.match(r"(https?:|mailto:|tel:|#|data:)", u):
+            continue
+        path, _, q = u.partition("?v=")
+        if exists(path) and (not q or q != bv.fp(path)):
+            stale.append(u)
+(ok if not stale else fail)(f"every local file URL has a current ?v= fingerprint – run tools/bump_versions.py ({len(stale)} stale: {stale[:3]})")
 
 # Third-party requests slow the page and trigger the GTmetrix CDN/request-chain audits
 ext = [a.get("src") or a.get("href") for t, a in tags

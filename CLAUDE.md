@@ -7,6 +7,7 @@ Work on a branch and open a PR. Merging to `main` deploys to production.
 
 The owner tracks Google ranking and the GTmetrix grade, so every change must stay SEO friendly and fast. Before committing:
 
+0. **Re-fingerprint files:** `python3 tools/bump_versions.py`. Every local file URL carries `?v=<content hash>`, and `vercel.json` caches CSS, JS and assets for a year (HTML is always revalidated). Without this step, phones keep showing the old CSS. That happened on the owner's iPhone: heavy fallback fonts, an unstyled gallery, a two-line header. Never overwrite an image that is also referenced *without* a fingerprint (og:image, JSON-LD, sitemap, manifest icons); give the new version a new file name instead.
 1. **Run the checker:** `python3 tools/check_site.py`. It must end with **0 failures**. Fix any FAIL, and look at every WARN.
 2. **Check in a real browser** (Playwright with Chromium at `/opt/pw-browsers/chromium`):
    - Desktop 1366px and phone 390px: no horizontal scroll and no JS errors.
