@@ -354,7 +354,7 @@ html.lb-open { overflow: hidden; }
 }
 
 /* ---------- Video reels ---------- */
-.reels { display: grid; grid-template-columns: repeat(2, minmax(0, 300px)); justify-content: center; gap: 28px; }
+.reels { display: grid; grid-template-columns: repeat(3, minmax(0, 280px)); justify-content: center; gap: 28px; }
 .reel { margin: 0; }
 .reel__frame {
   position: relative; height: 0; padding-top: 177.82%; /* 478x850 */ border-radius: var(--radius); overflow: hidden;
@@ -379,7 +379,11 @@ html.lb-open { overflow: hidden; }
 .reel__caption strong { display: block; font: 600 22px/1.2 var(--serif); color: var(--brown); }
 .reel__caption span { display: block; margin-top: 2px; font-size: 14px; line-height: 1.4; color: var(--muted); }
 @media (max-width: 640px) {
-  .reels { gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* phones: swipeable row, ~1.6 videos per view (the next one peeks in) */
+  .reels { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin: 0 -16px; padding: 0 16px 6px; scroll-padding: 0 16px; overscroll-behavior-x: contain; }
+  .reels::-webkit-scrollbar { display: none; }
+  .reel { flex: 0 0 60%; scroll-snap-align: start; }
   .reel__frame { border-radius: 16px; }
   .reel__btn { width: 36px; height: 36px; bottom: 8px; }
   .reel__play { left: 8px; } .reel__sound { right: 8px; }
