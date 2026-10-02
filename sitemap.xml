@@ -38,6 +38,15 @@
     <image:image>
       <image:loc>https://zivoraaccessories.in/assets/zivoraaccessories-11.jpg</image:loc>
     </image:image>
+    <image:image>
+      <image:loc>https://zivoraaccessories.in/assets/zivoraaccessories-12.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://zivoraaccessories.in/assets/zivoraaccessories-13.jpg</image:loc>
+    </image:image>
+    <image:image>
+      <image:loc>https://zivoraaccessories.in/assets/zivoraaccessories-14.jpg</image:loc>
+    </image:image>
     <video:video>
       <video:thumbnail_loc>https://zivoraaccessories.in/assets/zivoraaccessories-video-1.webp</video:thumbnail_loc>
       <video:title>How to style purple &amp; ivory cowrie hair tassels | Zivora Accessories</video:title>
@@ -53,6 +62,14 @@
       <video:content_loc>https://zivoraaccessories.in/assets/zivoraaccessories-video-2.mp4</video:content_loc>
       <video:duration>10</video:duration>
       <video:publication_date>2026-10-02T10:00:00+05:30</video:publication_date>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://zivoraaccessories.in/assets/zivoraaccessories-video-3.webp</video:thumbnail_loc>
+      <video:title>Pink tassel necklace &amp; earrings set for garba | Zivora Accessories</video:title>
+      <video:description>See the Zivora Accessories handmade pink thread necklace with mirror work and ghungroo charms, with matching tassel earrings, styled for a garba night.</video:description>
+      <video:content_loc>https://zivoraaccessories.in/assets/zivoraaccessories-video-3.mp4</video:content_loc>
+      <video:duration>10</video:duration>
+      <video:publication_date>2026-10-02T19:39:00+05:30</video:publication_date>
     </video:video>
   </url>
 </urlset>
