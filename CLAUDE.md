@@ -10,6 +10,7 @@ The owner tracks Google ranking and the GTmetrix grade, so every change must sta
 1. **Run the checker:** `python3 tools/check_site.py`. It must end with **0 failures**. Fix any FAIL, and look at every WARN.
 2. **Check in a real browser** (Playwright with Chromium at `/opt/pw-browsers/chromium`):
    - Desktop 1366px and phone 390px: no horizontal scroll and no JS errors.
+   - Header: every nav item, including the "DM to Order" button, stays on one line at every width from 1181px to 2560px. Below 1180px the ☰ menu is used. When adding a nav link, re-check this, and raise the breakpoint in `styles.css` if needed.
    - LCP under a throttled network (about 5 Mbps, 150 ms RTT) stays under about 1s locally. The LCP element is the hero image.
    - Anything below the fold loads lazily: no new requests before the user scrolls to it.
    - Also run Lighthouse (the engine behind GTmetrix) against a local server: `python3 -m http.server 8765`, then `CHROME_PATH=/opt/pw-browsers/chromium npx lighthouse http://127.0.0.1:8765/ --preset=desktop --chrome-flags="--headless=new --no-sandbox"`. Run it again without `--preset` for mobile. There must be no runtime error, desktop performance/SEO/accessibility/best-practices should stay at 100, and CLS must stay under 0.1.
