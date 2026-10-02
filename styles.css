@@ -1,7 +1,5 @@
 /* ---------- Fonts (self-hosted) ---------- */
-@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 500; font-display: swap; src: url("assets/fonts/cormorant-garamond-500.woff2") format("woff2"); }
 @font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 600; font-display: swap; src: url("assets/fonts/cormorant-garamond-600.woff2") format("woff2"); }
-@font-face { font-family: "Cormorant Garamond"; font-style: normal; font-weight: 700; font-display: swap; src: url("assets/fonts/cormorant-garamond-700.woff2") format("woff2"); }
 @font-face { font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500; font-display: swap; src: url("assets/fonts/cormorant-garamond-500-italic.woff2") format("woff2"); }
 @font-face { font-family: "DM Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("assets/fonts/dm-sans-400.woff2") format("woff2"); }
 @font-face { font-family: "DM Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url("assets/fonts/dm-sans-500.woff2") format("woff2"); }
@@ -101,7 +99,7 @@ p { margin: 0; }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand img { width: 52px; height: 52px; border-radius: 50%; box-shadow: 0 0 0 1px var(--line); }
 .brand__text { display: flex; flex-direction: column; line-height: 1.1; }
-.brand__name { font: 700 24px/1 var(--serif); color: var(--brown); letter-spacing: .08em; text-transform: uppercase; }
+.brand__name { font: 600 24px/1 var(--serif); color: var(--brown); letter-spacing: .08em; text-transform: uppercase; }
 .brand__sub { font-size: 10px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
 
 .nav { display: flex; align-items: center; gap: 32px; }
@@ -250,7 +248,7 @@ p { margin: 0; }
 .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; counter-reset: none; }
 .step { position: relative; padding: 36px 30px; border-radius: var(--radius); border: 1px dashed var(--gold); background: transparent; transition: background .3s; }
 .step:hover { background: var(--card); }
-.step__num { font: italic 600 52px/1 var(--serif); color: var(--rose); opacity: .85; display: block; margin-bottom: 18px; }
+.step__num { font: italic 500 52px/1 var(--serif); color: var(--rose); opacity: .85; display: block; margin-bottom: 18px; }
 .step h3 { font-size: 26px; margin-bottom: 8px; }
 .step p { color: var(--muted); font-size: 15px; }
 .step strong { color: var(--brown); }
