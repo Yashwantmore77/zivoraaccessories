@@ -6,6 +6,11 @@
 @font-face { font-family: "DM Sans"; font-style: normal; font-weight: 600; font-display: swap; src: url("assets/fonts/dm-sans-600.woff2") format("woff2"); }
 @font-face { font-family: "Great Vibes"; font-style: normal; font-weight: 400; font-display: swap; src: url("assets/fonts/great-vibes-400.woff2") format("woff2"); }
 
+/* Metric-matched fallbacks: text keeps its size while the web fonts load (no layout shift / CLS) */
+@font-face { font-family: "DM Sans Fallback"; src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica"); size-adjust: 105.47%; ascent-override: 94.05%; descent-override: 29.39%; line-gap-override: 0%; }
+@font-face { font-family: "Cormorant Fallback"; font-weight: 600 700; src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT"), local("Liberation Serif Bold"), local("Times Bold"); size-adjust: 92.01%; ascent-override: 100.43%; descent-override: 31.19%; line-gap-override: 0%; }
+@font-face { font-family: "Cormorant Fallback"; font-weight: 300 500; src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"), local("Times"); size-adjust: 92.01%; ascent-override: 100.43%; descent-override: 31.19%; line-gap-override: 0%; }
+
 :root {
   --cream: #fbf6ef;
   --cream-2: #f6ece0;
@@ -13,15 +18,16 @@
   --brown: #5a2e1f;
   --brown-2: #7a4330;
   --ink: #3b2219;
-  --muted: #8a6d60;
+  --muted: #7a5f53; /* 5:1+ on all cream backgrounds (AA) */
   --rose: #c96a7b;
   --rose-soft: #f7e3e3;
   --gold: #b8893b;
+  --gold-text: #8c6224; /* gold for small text: 5:1 contrast on cream (AA) */
   --line: #ecdccb;
   --radius: 22px;
   --shadow: 0 20px 50px -24px rgba(90, 46, 31, .35);
-  --serif: "Cormorant Garamond", Georgia, serif;
-  --sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --serif: "Cormorant Garamond", "Cormorant Fallback", Georgia, serif;
+  --sans: "DM Sans", "DM Sans Fallback", system-ui, -apple-system, sans-serif;
   --script: "Great Vibes", cursive;
 }
 
@@ -48,7 +54,7 @@ p { margin: 0; }
   font-family: var(--sans); line-height: 1.5;
   display: inline-flex; align-items: center; gap: 12px;
   font-size: 12px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 16px;
+  color: var(--gold-text); margin-bottom: 16px;
 }
 .eyebrow::before { content: ""; width: 28px; height: 1px; background: currentColor; }
 .eyebrow--center::after { content: ""; width: 28px; height: 1px; background: currentColor; }
@@ -237,7 +243,7 @@ p { margin: 0; }
 .product:hover .product__dm, .product__dm:focus-visible { opacity: 1; transform: none; }
 .product__dm:hover { background: var(--brown); color: #fff; }
 .product__info { padding: 16px 4px 0; }
-.product__type { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+.product__type { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-text); font-weight: 600; }
 .product__info h3 { font-size: 24px; margin-top: 4px; }
 
 @media (hover: none) {
@@ -404,7 +410,7 @@ html.lb-open { overflow: hidden; }
 .footer__social a:hover svg { stroke: #fff; }
 .footer__social svg, .cta svg { width: 20px; height: 20px; fill: none; stroke: var(--brown); stroke-width: 1.7; }
 .footer__copy { text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px; padding-inline: 16px; }
-.footer__seo { margin-top: 6px; font-size: 12px; opacity: .8; }
+.footer__seo { margin-top: 6px; font-size: 12px; }
 
 /* ---------- Floating DM button (mobile) ---------- */
 .fab {
@@ -418,9 +424,9 @@ html.lb-open { overflow: hidden; }
 .fab svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------- Reveal ---------- */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s ease; }
-.reveal.is-in { opacity: 1; transform: none; }
-.no-js .reveal { opacity: 1; transform: none; }
+/* Only hide below-the-fold sections when JS is running; the hero is never hidden (keeps LCP detectable) */
+.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s ease; }
+.js .reveal.is-in { opacity: 1; transform: none; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 960px) {
@@ -479,5 +485,5 @@ html.lb-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
-  .reveal { opacity: 1; transform: none; }
+  .js .reveal { opacity: 1; transform: none; }
 }
