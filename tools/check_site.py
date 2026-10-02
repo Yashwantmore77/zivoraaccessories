@@ -161,6 +161,12 @@ local |= set(re.findall(r'url\("?([^")]+)"?\)', css))
 missing = sorted(u for u in local if u and not exists(u))
 (ok if not missing else fail)(f"every referenced local file exists ({len(missing)} missing: {missing[:5]})")
 
+# The hero (LCP) must be visible at first paint: fade-in classes there make Lighthouse/GTmetrix
+# fail with "Failed to find the Largest Contentful Paint"
+hero_html = html[html.find('class="hero"'):html.find("<!-- MARQUEE -->")]
+(ok if " reveal" not in hero_html and '"reveal' not in hero_html else fail)("hero has no fade-in (reveal) classes, so LCP is visible at first paint")
+(ok if ".js .reveal" in css or ".reveal" not in css else fail)("reveal animation only hides content when JS runs (.js .reveal)")
+
 # Third-party requests slow the page and trigger the GTmetrix CDN/request-chain audits
 ext = [a.get("src") or a.get("href") for t, a in tags
        if t in ("script", "link", "img", "iframe", "source")
